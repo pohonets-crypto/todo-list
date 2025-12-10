@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>TODO List</h1>
+
+  <a href="{% url 'task:task-create' %}" class="btn btn-primary mb-3">Add task</a>
+  {% for task in tasks %}
+    <ul class="list-group">
+     <li class="list-group-item border-bottom pb-3 mb-3">
+       <h2>{{ task.content }}</h2>
+     {% if task.is_done %}
+       <h2 class="text-success">Done</h2>
+       {% else %}
+       <h2 style="color: red;">Not done</h2>
+     {% endif %}
+
+       <h3>Created:</h3>{{ task.created_at }}
+       <h3>Tags: </h3>
+     {% for tag in task.tags.all %}
+        {{ tag.name }}
+     {% empty %}
+        No tags
+     {% endfor %}
+       <br>
+       <a href="{% url 'task:task-update' pk=task.id %}" class="btn btn-primary mb-3">Update</a>
+     <a href="{% url 'task:task-delete' pk=task.id %}" class="btn btn-primary mb-3">Delete</a>
+       <br>
+       {% if task.is_done is True %}
+       <a href="{% url 'task:task-toggle' pk=task.id %}">Undo</a>
+
+
+         {% else %}
+         <a href="{% url 'task:task-toggle' pk=task.id %}" class="btn btn-primary mb-3">Complete</a>
+     {% endif %}
+     </li>
+    </ul>
+
+  {% endfor %}
+{% endblock %}
